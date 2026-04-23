@@ -1,0 +1,42 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+jchatmind/data/
+data/
+
+# Java / Maven
+jchatmind/target/
+target/
+
+# Node / Vite
+ui/node_modules/
+ui/dist/
+ui/dist-ssr/
+
+# Environment and local config
+.env
+.env.*
+!.env.example
+ui/.env
+ui/.env.*
+!ui/.env.example
+jchatmind/src/main/resources/application-local.yaml
+jchatmind/src/main/resources/application-local.yml
+jchatmind/src/main/resources/application-dev.yaml
+jchatmind/src/main/resources/application-dev.yml
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Local scratch output
+jchatmind/output.txt

@@ -1,0 +1,6 @@
+spring:
+  ai:
+    deepseek:
+      api-key: test-deepseek-key
+    zhipuai:
+      api-key: test-zhipuai-key

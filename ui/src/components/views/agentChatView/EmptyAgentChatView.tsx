@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { Card, Space, Typography, Select } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
+import { Card, Space, Typography, Select, message as antdMessage } from "antd";
 import {
   BulbOutlined,
   MessageOutlined,
@@ -22,17 +22,27 @@ interface DefaultAgentChatViewProps {
   handleSendMessage: (message: string) => void;
   loading: boolean;
   agents: AgentVO[];
+  initialSelectedAgentId?: string;
 }
 
 const EmptyAgentChatView: React.FC<DefaultAgentChatViewProps> = ({
   loading,
   agents,
+  initialSelectedAgentId,
 }) => {
   const [message, setMessage] = useState("");
-  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(
+    initialSelectedAgentId ?? null,
+  );
 
   const navigate = useNavigate();
   const { refreshChatSessions } = useChatSessions();
+
+  useEffect(() => {
+    if (initialSelectedAgentId) {
+      setSelectedAgentId(initialSelectedAgentId);
+    }
+  }, [initialSelectedAgentId]);
 
   // 为每个 agent 生成 emoji
   const agentsWithEmoji = useMemo(() => {
@@ -93,6 +103,7 @@ const EmptyAgentChatView: React.FC<DefaultAgentChatViewProps> = ({
             <Card
               hoverable
               className="cursor-pointer transition-all hover:shadow-lg"
+              onClick={() => setMessage("你好，请介绍一下你自己。")}
             >
               <Space size="middle">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center">
@@ -112,6 +123,7 @@ const EmptyAgentChatView: React.FC<DefaultAgentChatViewProps> = ({
             <Card
               hoverable
               className="cursor-pointer transition-all hover:shadow-lg"
+              onClick={() => navigate("/knowledge-base")}
             >
               <Space size="middle">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-teal-400 flex items-center justify-center">
@@ -131,6 +143,7 @@ const EmptyAgentChatView: React.FC<DefaultAgentChatViewProps> = ({
             <Card
               hoverable
               className="cursor-pointer transition-all hover:shadow-lg"
+              onClick={() => setMessage("你好，我想开始一段新的对话。")}
             >
               <Space size="middle">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-red-400 flex items-center justify-center">
@@ -154,15 +167,23 @@ const EmptyAgentChatView: React.FC<DefaultAgentChatViewProps> = ({
         <div className="px-4 pb-4 pt-4">
           <Sender
             onSubmit={async () => {
-              if (!effectiveAgentId) return;
+              const trimmedMessage = message.trim();
+              if (!effectiveAgentId) {
+                antdMessage.warning("请先创建或选择一个智能体助手");
+                return;
+              }
+              if (!trimmedMessage) {
+                antdMessage.warning("请输入消息内容");
+                return;
+              }
               console.log("发送消息", message);
               const response = await createChatSession({
                 agentId: effectiveAgentId,
-                title: message.slice(0, 20),
+                title: trimmedMessage.slice(0, 20),
               });
               await createChatMessage({
                 sessionId: response.chatSessionId ?? "",
-                content: message,
+                content: trimmedMessage,
                 role: "user",
                 agentId: effectiveAgentId,
               });

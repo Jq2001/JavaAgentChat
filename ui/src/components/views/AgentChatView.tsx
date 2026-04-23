@@ -176,6 +176,7 @@ const AgentChatView: React.FC = () => {
         agents={agents}
         loading={loading}
         handleSendMessage={handleSendMessage}
+        initialSelectedAgentId={state?.selectedAgentId}
       />
     );
   }
