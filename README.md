@@ -2,8 +2,7 @@
 
 JChatMind is a full-stack AI agent assistant built with Spring AI, React, PostgreSQL and pgvector. It supports multi-turn agent reasoning, tool execution, knowledge-base retrieval and real-time execution status streaming.
 
-This repository is maintained by JuliusQian as a personal learning and development project. The original MIT license notice is preserved in `LICENSE`.
-
+This repository is maintained by JuliusQian as a personal learning and development project. 
 ## Features
 
 - Agent loop with thinking, execution, completion and error states
